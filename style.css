@@ -1,0 +1,140 @@
+/* --------------------------------------------------------------------------
+   Definição de Variáveis CSS (Cores para Desenho no Canvas e Estilos Customizados)
+   Estes valores são harmonizados com o Tailwind Config do index.html para consistência.
+-----------------------------------------------------------------------------*/
+:root {
+    /* Cores de Fundo */
+    --cor-fundo-app: #0d1117; 
+    --cor-fundo-canvas: #1e293b; /* Fundo do Canvas mais escuro para contraste */
+    --cor-texto: #e2e8f0;
+
+    /* Cores do Jogo (Harmonizadas com o Tailwind Config) */
+    --cor-primaria: #4ade80; /* Verde Neon (Cristal/UI) */
+    --cor-secundaria: #3b82f6; /* Azul (Pontuação) */
+    --cor-player: #fcd34d; /* Amarelo (Jogador) */
+    --cor-inimigo: #ef4444; /* Vermelho (Perigo/Vidas) */
+    --cor-plataforma: #475569; /* Cinza Chumbo (Plataformas) */
+    --cor-saida: #10b981; /* Verde Escuro (Portal de Saída) */
+    --cor-trap: #9c27b0; /* Violeta (Armadilha) - Mantido */
+}
+
+/* --------------------------------------------------------------------------
+   Estilos Globais (Complementando o Tailwind)
+-----------------------------------------------------------------------------*/
+body {
+    /* O Tailwind já define a cor de fundo e o min-height, mas garantimos a fonte. */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--cor-fundo-app);
+    color: var(--cor-texto);
+    overflow-x: hidden;
+    letter-spacing: 0.5px;
+}
+
+/* --------------------------------------------------------------------------
+   Estilo do Canvas (Responsividade e Glow)
+-----------------------------------------------------------------------------*/
+#gameCanvas {
+    /* Garante que o canvas seja flexível e se ajuste ao seu container */
+    max-width: 100%;
+    height: auto;
+    
+    /* Estilos de borda e sombra customizados */
+    border: 3px solid var(--cor-primaria);
+    border-radius: 0.75rem;
+    background-color: var(--cor-fundo-canvas);
+    /* Efeito de glow usando a cor primária harmonizada */
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.5), inset 0 0 5px rgba(74, 222, 128, 0.5);
+    
+    /* Previne o uso de gestos touch no canvas para evitar zoom no mobile */
+    touch-action: none;
+    margin-bottom: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   Componentes Customizados (Botões e Inputs Futuristas)
+-----------------------------------------------------------------------------*/
+
+/* Estilo dos botões futuristas */
+.btn-futuristic {
+    /* Usando cores harmonizadas do Tailwind config */
+    background: linear-gradient(145deg, var(--cor-primaria), #14b8a6); /* Gradiente Verde */
+    color: #1f2937; /* Cinza Escuro para contraste */
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 800;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+    border: none;
+}
+
+.btn-futuristic:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+}
+
+.btn-futuristic:active {
+    transform: scale(0.98);
+}
+
+.input-futuristic {
+    border: 2px solid var(--cor-primaria);
+    background-color: #1f2937; /* Fundo mais escuro */
+    color: var(--cor-texto);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.input-futuristic:focus {
+    outline: none;
+    border-color: var(--cor-secundaria);
+    box-shadow: 0 0 5px var(--cor-secundaria);
+}
+
+/* HUD Styling - Limita a largura do HUD para corresponder ao canvas */
+#hud {
+    font-family: 'Orbitron', sans-serif;
+    max-width: 800px; 
+}
+
+/* Touch Controls Styling (Mobile) */
+#touchControls {
+    background-color: rgba(15, 23, 42, 0.9); /* slate-900 com transparência */
+    border-top: 2px solid var(--cor-primaria);
+}
+
+.touch-btn {
+    background-color: rgba(74, 222, 128, 0.2); /* cor-primaria transparente */
+    border: 2px solid var(--cor-primaria);
+    color: var(--cor-primaria);
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    padding: 0.75rem 1.25rem;
+    border-radius: 50%;
+    width: 60px; /* Aumentado para melhor toque */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.touch-btn:active {
+    background-color: var(--cor-primaria);
+    color: #1f2937;
+    box-shadow: 0 0 15px var(--cor-primaria);
+}
+
+/* Responsividade: Reduzir tamanho dos botões em telas muito pequenas */
+@media (max-width: 400px) {
+    .touch-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+}
