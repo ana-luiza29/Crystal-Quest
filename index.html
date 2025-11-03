@@ -1,142 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crystal Quest - Jogo de Plataforma</title>
-    
-    <!-- Inclui Tailwind CSS via CDN para utilitários de UI e responsividade -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- CORREÇÃO: Link para a folha de estilo customizada (style.css) -->
-    <link rel="stylesheet" href="style.css"> 
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <!-- CORREÇÃO: Configuração customizada do Tailwind para as cores usadas no jogo -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Estas cores serão definidas em style.css, mas a nomenclatura deve ser consistente.
-                        'cor-primaria': '#4ade80', // Verde Neon (Cristal/UI)
-                        'cor-secundaria': '#3b82f6', // Azul (Pontuação)
-                        'cor-player': '#fcd34d', // Amarelo (Jogador)
-                        'cor-inimigo': '#ef4444', // Vermelho (Perigo)
-                        'cor-plataforma': '#475569', // Cinza Chumbo (Plataformas)
-                        'cor-saida': '#10b981', // Verde Escuro (Saída)
-                    }
-                }
-            }
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crystal Quest</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center p-4">
-
-    <!-- CORREÇÃO: Cabeçalho Persistente movido para dentro do <body> -->
-    <header id="header" class="w-full max-w-5xl flex justify-between items-center py-4 px-2 mb-6 border-b border-cor-primaria/30">
-        <div class="text-3xl font-black text-cor-primaria flex items-center gap-2" style="font-family: 'Orbitron', sans-serif;">
-            <span>✨ STAR QUEST</span>
-        </div>
-        <div id="game-controls" class="space-x-3">
-            <button id="pauseBtn" class="btn-futuristic text-sm hidden" aria-label="Pausar Jogo">PAUSAR</button>
-            <button id="menuBtn" class="btn-futuristic text-sm bg-red-600 hover:bg-red-700 hidden" aria-label="Voltar ao Menu Principal" style="background: linear-gradient(145deg, #f44336, #d32f2f); color: white; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);">MENU</button>
-        </div>
-    </header>
-
-    <!-- Conteúdo Principal - Controle de Telas por JS -->
-    <main class="game-screen flex-grow flex items-center justify-center w-full max-w-7xl">
-
-        <!-- 1. Tela Inicial (Menu Principal) -->
-        <div id="menuScreen" class="w-full max-w-lg p-8 bg-slate-900 rounded-xl shadow-2xl space-y-7 border border-cor-primaria/50">
-            <h1 class="text-5xl font-extrabold text-center text-cor-primaria mb-6" style="font-family: 'Orbitron', sans-serif;">CRYSTAL QUEST</h1>
-
-            <p class="text-center text-sm text-slate-400">Navegue pelas plataformas espaciais, colete toda a energia de cristal e escape antes que a contagem regressiva termine!</p>
-
-            <div class="space-y-4">
-                <label for="playerName" class="block text-sm font-medium text-slate-300">NOME DO PILOTO:</label>
-                <input type="text" id="playerName" placeholder="Insira seu nome..." class="input-futuristic w-full" value="Piloto X">
-            </div>
-
-            <div class="space-y-4">
-                <label for="difficulty" class="block text-sm font-medium text-slate-300">DIFICULDADE DE NAVEGAÇÃO:</label>
-                <select id="difficulty" class="input-futuristic w-full">
-                    <option value="easy">Cadete (Fácil)</option>
-                    <option value="medium">Guardião (Médio)</option>
-                    <option value="hard">Comandante (Difícil)</option>
-                </select>
-            </div>
-
-            <div id="highScoreDisplay" class="text-center text-lg font-bold p-4 bg-slate-800 rounded-lg border-l-4 border-cor-secundaria">
-                <span class="text-sm text-slate-400">MELHOR PONTUAÇÃO (HIGH SCORE)</span><br>
-                <span id="highScoreValue" class="text-cor-secundaria text-2xl" style="font-family: 'Orbitron', sans-serif;">0</span>
-            </div>
-
-            <button id="startBtn" class="btn-futuristic w-full text-xl">INICIAR MISSÃO</button>
-
-            <!-- Instruções -->
-            <div id="instructions" class="p-4 bg-slate-800 rounded-lg text-sm space-y-2 border-l-4 border-cor-primaria">
-                <h3 class="font-bold text-slate-200">🛠️ Guia de Bordo:</h3>
-                <ul class="list-disc list-inside text-slate-300 space-y-1">
-                    <li>Movimento: Setas, A/D (PC) ou Botões de Controle Tátil (Mobile).</li>
-                    <li>Pulo: Barra de Espaço (PC) ou Botão Pular (Mobile).</li>
-                    <li>Objetivo: Coletar Cristais (10 ou 50 pts) para atingir a meta.</li>
-                    <li>Perigos: Inimigos em órbita ou Armadilhas roxas (Perde 1 Vida).</li>
-                    <li>Saída: Após atingir a meta de pontos, encontre o portal verde.</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 2. Tela do Jogo e HUD -->
-        <div id="gameScreen" class="hidden w-full max-w-5xl flex flex-col items-center">
-            <!-- HUD (Heads-Up Display) -->
-            <div id="hud" class="w-full flex justify-between items-center text-xs md:text-sm p-3 mb-2 bg-slate-800/80 rounded-lg">
-                <div class="flex items-center space-x-3">
-                    <span class="font-bold text-slate-300">PILOTO: <span id="hudPlayerName" class="text-cor-player font-bold"></span></span>
-                    <span class="font-bold text-slate-300">VIDAS: <span id="hudLives" class="text-cor-inimigo">3</span></span>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <span class="font-bold text-slate-300">ENERGIA: <span id="hudScore" class="text-cor-primaria">0</span></span>
-                    <span class="font-bold text-slate-300">TEMPO: <span id="hudTimer" class="text-cor-saida">0:00</span></span>
-                </div>
-            </div>
-
-            <!-- Canvas de Jogo -->
-            <canvas id="gameCanvas" width="800" height="400" class="shadow-xl rounded-lg border-2 border-cor-primaria/50"></canvas>
-
-            <!-- Mobile: Controles Táteis -->
-            <!-- Usamos botões nativos para melhor acessibilidade tátil -->
-            <div id="touchControls" class="flex justify-between items-center md:hidden fixed bottom-0 left-0 right-0 p-4 z-30 hidden w-full bg-gray-900/90">
-                <div class="flex space-x-4">
-                    <button id="touchLeft" class="touch-btn">◀</button>
-                    <button id="touchRight" class="touch-btn">▶</button>
-                </div>
-                <button id="touchJump" class="touch-btn">⬆</button>
-            </div>
-        </div>
-
-        <!-- 3. Tela de Fim de Jogo (Vitória/Derrota) -->
-        <div id="endGameScreen" class="hidden w-full max-w-lg p-10 bg-slate-900 rounded-xl shadow-2xl space-y-6 text-center border border-cor-primaria/50">
-            <h2 id="endGameTitle" class="text-4xl font-extrabold" style="font-family: 'Orbitron', sans-serif;"></h2>
-            <p class="text-xl text-slate-300 border-b border-slate-700 pb-3">Pontuação Total: <span id="endGameScore" class="text-cor-secundaria font-bold text-3xl">0</span></p>
-            <p id="endGameTime" class="text-lg text-slate-400"></p>
-            <p id="endGameReason" class="text-md text-slate-400"></p>
-            <button id="playAgainBtn" class="btn-futuristic w-full text-xl">NOVA TENTATIVA</button>
-        </div>
-
-        <!-- Tela de Pausa -->
-        <div id="pauseScreen" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-40">
-            <div class="p-10 bg-slate-800 rounded-xl text-center shadow-2xl space-y-6 border-l-4 border-cor-primaria">
-                <h2 class="text-4xl font-bold text-cor-primaria" style="font-family: 'Orbitron', sans-serif;">MISSÃO PAUSADA</h2>
-                <button id="resumeBtn" class="btn-futuristic w-full">RETOMAR</button>
-                <button id="pauseMenuBtn" class="btn-futuristic w-full" style="background: linear-gradient(145deg, #f44336, #d32f2f); color: white;">ABORTAR MISSÃO (MENU)</button>
-            </div>
-        </div>
-
-    </main>
+<body>
+  <header>
+    <h1>💎 CRYSTAL QUEST</h1>
+    <div id="menu-buttons">
     
-    <!-- CORREÇÃO: Link para o script principal -->
-    <script src="script.js"></script>
+    </div>
+  </header>
+
+  <div id="start-screen">
+    <h2>Bem-vindo(a) ao Crystal Quest!</h2>
+    <input type="text" id="playerName" placeholder="Digite seu nome..." />
+    <button id="startBtn">Iniciar Jogo</button>
+  </div>
+
+  <section id="hud" class="hidden">
+    <div id="playerInfo">
+      <span>PILOTO: <b id="nameDisplay">?</b></span>
+      <span>VIDAS: <b id="livesDisplay">3</b></span>
+    </div>
+    <div id="levelInfo">
+      <span>CRISTAIS: <b id="crystalsDisplay">0</b></span>
+      <span>NÍVEL: <b id="levelDisplay">1</b></span>
+    </div>
+  </section>
+
+  <main id="gameArea" class="hidden">
+    <canvas id="gameCanvas" width="900" height="500"></canvas>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
